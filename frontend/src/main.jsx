@@ -22,19 +22,23 @@ import Lu from './Linear-algebra/Matrix.jsx';
 import Jacobi from './Linear-algebra/Jacobi.jsx';
 import Conju from './Linear-algebra/Conju.jsx';
 
-
-
 import Interpolation from './Interpolation/Interpolation.jsx'
 import Lagrange from './Interpolation/Lagrange.jsx'
 import Newtondiff from './Interpolation/Newtondiff.jsx'
 import Spline from './Interpolation/Spline.jsx'
 
 import Exterpolation from './Exterpolation/Exterpolation.jsx';
-import Multi from './Exterpolation/Multi.jsx';
 import Simple from './Exterpolation/Simple.jsx';
+import Multi from './Exterpolation/Multi.jsx';
 
+import Integration from './Integration/Integration.jsx';
+import Trapezoidal from './Integration/Trapezoidal.jsx';
+import Composite_Trapezoidal from './Integration/Composite_Trapezoidal.jsx';
+import Simpson from './Integration/Simpson.jsx';
+import Composite_Simpson from './Integration/Composite_Simpson.jsx';
 
-
+import Differentiation from './Differentiation/Differentiation.jsx';
+import Numerical_Differentiation from './Differentiation/Numerical_Differentiation.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -63,9 +67,18 @@ createRoot(document.getElementById('root')).render(
         <Route path="/Interpolation/Lagrange" element={<Lagrange />} />
         <Route path="/Interpolation/Spline" element={<Spline />} />
 
-
         <Route path="/Exterpolation/Exterpolation" element={<Exterpolation />} />
+        <Route path="/Exterpolation/Simple" element={<Simple />} />
+        <Route path="/Exterpolation/Multi" element={< Multi />} />
 
+        <Route path="/Integration/Integration" element={<Integration />} />
+        <Route path="/Integration/Trapezoidal" element={<Trapezoidal />} />
+        <Route path="/Integration/Composite_Trapezoidal" element={<Composite_Trapezoidal/>} />
+        <Route path="/Integration/Simpson" element={<Simpson />} />
+        <Route path="/Integration/Composite_Simpson" element={<Composite_Simpson />} />
+
+        <Route path="/Differentiation/Differentiation" element={<Differentiation />} />
+        <Route path="/Differentiation/Numerical_Differentiation" element={<Numerical_Differentiation />} />
 
       </Routes>
     </BrowserRouter>
