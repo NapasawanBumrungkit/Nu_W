@@ -2,15 +2,32 @@ import { useState } from "react";
 import Plot from "react-plotly.js";
 
 function LinearRegression() {
-  const [xValues, setXValues] = useState("");
-  const [yValues, setYValues] = useState("");
+  const [numPoint, setNumpoint] = useState(3);
+  const [xValues, setXValues] = useState(Array(3).fill(0));
+  const [yValues, setYValues] = useState(Array(3).fill(0));
   const [slope, setSlope] = useState(null);
   const [intercept, setIntercept] = useState(null);
 
-  const handleCalculate = () => {
-    const x = xValues.split(",").map(Number);
-    const y = yValues.split(",").map(Number);
+  const numberPointChange = (e) => {
+    const n = Number(e.target.value);
+    setNumpoint(n);
+    setXValues(Array(n).fill(0));
+    setYValues(Array(n).fill(0));
+  };
 
+  const xChange = (index, value) => {
+    const newX = [...xValues];
+    newX[index] = Number(value);
+    setXValues(newX);
+  }
+
+  const yChange = (index, value) =>{
+    const newy = [...yValues];
+    newy[index] = Number(value);
+    setYValues(newy);
+  }
+
+  const handleCalculate = () => {
     if (x.length !== y.length || x.length < 2) {
       alert("กรุณากรอกข้อมูล X และ Y ให้มีจำนวนเท่ากัน และอย่างน้อย 2 ค่า");
       return;
@@ -31,8 +48,8 @@ function LinearRegression() {
 
   const generateLine = () => {
     const x = xValues.split(",").map(Number);
-    const minX = Math.min(...x);
-    const maxX = Math.max(...x);
+    const minX = Math.min(...xValues);
+    const maxX = Math.max(...xValues);
     const lineX = [minX, maxX];
     const lineY = lineX.map((xi) => slope * xi + intercept);
     return { lineX, lineY };
@@ -45,26 +62,37 @@ function LinearRegression() {
       <h2>Linear Regression </h2>
 
       <div style={{ marginBottom: "10px" }}>
-        <label> X (use ,): </label>
+        <label> จำวนวนชุดข้อมูล: </label>
         <input
-          type="text"
-          value={xValues}
-          onChange={(e) => setXValues(e.target.value)}
-          placeholder=" -2,-1,0,1,2"
-          style={{ width: "250px", marginLeft: "5px" }}
+          type="number"
+          min="2"
+          value={numPoint}
+          onChange={numberPointChange}
+          style={{ width: "60px", marginLeft: "50px" }}
         />
       </div>
 
-      <div style={{ marginBottom: "10px" }}>
-        <label> Y (use ,): </label>
-        <input
-          type="text"
-          value={yValues}
-          onChange={(e) => setYValues(e.target.value)}
-          placeholder=" -3,-1,1,3,5"
-          style={{ width: "250px", marginLeft: "5px" }}
-        />
-      </div>
+      <div>
+        <h4>value x and y</h4>
+        {xValues.map((_, i) => (
+          <div key={i} style = {{marginBottom: "5px"}} >
+            <label>X{i + 1}:</label>
+            <input
+              type="number"
+              value={xValues[i]}
+              onChange={(e) => xChange(i, e.target.value)}
+              style={{ width: "80px", marginRight: "10px" }}
+            />
+            <lable>Y{i + 1}:</lable>
+            <input
+              type="number"
+              value={yValues[i]}
+              onChange={(e) => yChange(i, e.target.value)}
+              style={{width: "80px", marginLeft: "10px"}}
+            />
+          </div>
+        ))}
+        </div>
 
       <button
         onClick={handleCalculate}
