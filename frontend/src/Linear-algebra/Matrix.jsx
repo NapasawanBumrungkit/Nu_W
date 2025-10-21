@@ -37,12 +37,12 @@ function Matrix () {
       .fill(0)
       .map((_, i) => Array(n).fill(0).map((__, j) => (i === j ? 1 : 0)));
 
-    // === สร้างเมทริกซ์ผกผันด้วย Gauss-Jordan ===
+  
     for (let i = 0; i < n; i++) {
       let pivot = mat[i][i];
 
       if (pivot === 0) {
-        // หาแถวใหม่มาแทน
+       
         let swapRow = i + 1;
         while (swapRow < n && mat[swapRow][i] === 0) swapRow++;
         if (swapRow === n) {
@@ -54,13 +54,12 @@ function Matrix () {
         pivot = mat[i][i];
       }
 
-      // ทำให้ pivot = 1
+
       for (let j = 0; j < n; j++) {
         mat[i][j] /= pivot;
         identity[i][j] /= pivot;
       }
 
-      // ทำให้ค่าอื่นใน column เดียวกันเป็น 0
       for (let k = 0; k < n; k++) {
         if (k !== i) {
           const factor = mat[k][i];
@@ -72,7 +71,7 @@ function Matrix () {
       }
     }
 
-    // === คำนวณ X = A⁻¹ * B ===
+
     const Xresult = Array(n).fill(0);
     for (let i = 0; i < n; i++) {
       for (let j = 0; j < n; j++) {
@@ -127,7 +126,7 @@ function Matrix () {
         </button>
       </div>
 
-      {/* ===== Matrix A ===== */}
+
       <h3>Matrix A:</h3>
       <table
         border="1"
@@ -156,7 +155,7 @@ function Matrix () {
         </tbody>
       </table>
 
-      {/* ===== Vector B ===== */}
+
       <h3>Vector b:</h3>
       <div>
         {B.map((val, i) => (
@@ -175,7 +174,7 @@ function Matrix () {
         ))}
       </div>
 
-      {/* ===== Inverse Matrix ===== */}
+
       {inverseA.length > 0 && (
         <div style={{ marginTop: "20px" }}>
           <h3>Matrix A⁻¹ :</h3>
@@ -197,7 +196,7 @@ function Matrix () {
         </div>
       )}
 
-      {/* ===== ผลลัพธ์ ===== */}
+
       {X.length > 0 && (
         <div style={{ marginTop: "20px" }}>
           <h3>ผลลัพธ์ (Solution):</h3>

@@ -39,7 +39,7 @@ function Conju() {
     let r = vecSub(B, matVec(A, x));
     let p = [...r];
     let rsold = dot(r, r);
-    const tol = 0.001; // ε = 0.001%
+    const tol = 0.001; 
     const maxIter = n * 50;
     const errors = [];
 
@@ -52,7 +52,7 @@ function Conju() {
       const rsnew = dot(r, r);
       if (Math.sqrt(rsnew) < 1e-12) break;
 
-      // คำนวณ relative error %
+      
       const err = (vecNorm(vecSub(x, x_old)) / (vecNorm(x) + 1e-12)) * 100;
       errors.push(err);
 
@@ -84,7 +84,7 @@ function Conju() {
         </button>
       </div>
 
-      {/* ===== Matrix A ===== */}
+      
       <h3>Matrix A:</h3>
       <table border="1" cellPadding="5" style={{ borderCollapse: "collapse", marginBottom: "10px" }}>
         <tbody>
@@ -100,15 +100,27 @@ function Conju() {
         </tbody>
       </table>
 
-      {/* ===== Vector B ===== */}
+      
       <h3>Vector b:</h3>
-      <div>
-        {B.map((val, i) => (
-          <input key={i} type="number" value={val} onChange={(e) => handleBChange(i, e.target.value)} style={{ width: "60px", margin: "3px", textAlign: "center", border: "none" }}/>
-        ))}
-      </div>
+      <table border="1" cellPadding="5" style={{ borderCollapse: "collapse", marginBottom: "10px" }}>
+        <tbody>
+          <tr>
+          {B.map((val, i) => (
+            <td key={i} style={{ textAlign: "center" }}>
+              <input
+                type="number"
+                value={val}
+                onChange={(e) => handleBChange(i, e.target.value)}
+                style={{ width: "60px", margin: "3px", textAlign: "center", border: "none" }}
+              />
+            </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
 
-      {/* ===== ผลลัพธ์ ===== */}
+
+      
       {X.length > 0 && (
         <div style={{ marginTop: "20px" }}>
           <h3>ผลลัพธ์ (Solution):</h3>

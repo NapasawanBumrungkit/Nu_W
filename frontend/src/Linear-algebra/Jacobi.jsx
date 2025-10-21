@@ -8,8 +8,8 @@ function Jacobi() {
   );
   const [B, setB] = useState(Array(3).fill(0));
   const [X, setX] = useState([]);
-  const [iterations, setIterations] = useState(50); // จำนวนรอบ iteration
-  const [tolerance, setTolerance] = useState(0.000001); // ค่าความคลาดเคลื่อน
+  const [iterations, setIterations] = useState(50); 
+  const [tolerance, setTolerance] = useState(0.000001); 
 
   const handleSizeChange = (size) => {
     const newSize = parseInt(size);
@@ -46,7 +46,7 @@ function Jacobi() {
         xNew[i] = (B[i] - sum) / A[i][i];
       }
 
-      // ตรวจสอบว่าค่าเปลี่ยนแปลงน้อยกว่า tolerance หรือไม่
+     
       let error = 0;
       for (let i = 0; i < n; i++) {
         error += Math.abs(xNew[i] - xOld[i]);
@@ -132,7 +132,6 @@ function Jacobi() {
         </button>
       </div>
 
-      {/* ===== Matrix A ===== */}
       <h3>Matrix A:</h3>
       <table
         border="1"
@@ -161,7 +160,6 @@ function Jacobi() {
         </tbody>
       </table>
 
-      {/* ===== Vector B ===== */}
       <h3>Vector b:</h3>
       <div>
         {B.map((val, i) => (
@@ -180,7 +178,6 @@ function Jacobi() {
         ))}
       </div>
 
-      {/* ===== ผลลัพธ์ ===== */}
       {X.length > 0 && (
         <div style={{ marginTop: "20px" }}>
           <h3>ผลลัพธ์ (Solution):</h3>

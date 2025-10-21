@@ -29,13 +29,11 @@ function G_jor() {
   };
 
   const calculate = () => {
-    // Clone A และ B
     let mat = A.map(row => [...row]);
     let vec = [...B];
     const n = mat.length;
 
     for (let k = 0; k < n; k++) {
-      // Pivot ต้องไม่เป็น 0
       if (mat[k][k] === 0) {
         for (let i = k + 1; i < n; i++) {
           if (mat[i][k] !== 0) {
@@ -46,14 +44,12 @@ function G_jor() {
         }
       }
 
-      // ทำให้ pivot เป็น 1
       const pivot = mat[k][k];
       for (let j = 0; j < n; j++) {
         mat[k][j] /= pivot;
       }
       vec[k] /= pivot;
 
-      // กำจัดค่าอื่นใน column k ให้เป็น 0
       for (let i = 0; i < n; i++) {
         if (i !== k) {
           const factor = mat[i][k];
@@ -65,7 +61,7 @@ function G_jor() {
       }
     }
 
-    setX(vec); // vec จะเป็นผลลัพธ์โดยตรง
+    setX(vec); 
   };
 
   return (
@@ -90,7 +86,7 @@ function G_jor() {
         </button>
       </div>
 
-      {/* ===== Matrix A ===== */}
+      
       <h3>Matrix A:</h3>
       <table border="1" cellPadding="5" style={{ borderCollapse: "collapse", marginBottom: "10px" }}>
         <tbody>
@@ -111,7 +107,6 @@ function G_jor() {
         </tbody>
       </table>
 
-      {/* ===== Vector B ===== */}
       <h3>Vector b:</h3>
       <div>
         {B.map((val, i) => (
@@ -125,7 +120,7 @@ function G_jor() {
         ))}
       </div>
 
-      {/* ===== ผลลัพธ์ ===== */}
+     
       {X.length > 0 && (
         <div style={{ marginTop: "20px" }}>
           <h3>ผลลัพธ์ (Solution):</h3>
