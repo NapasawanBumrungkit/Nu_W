@@ -37,6 +37,8 @@ import Composite_Trapezoidal from './Integration/Composite_Trapezoidal.jsx';
 import Simpson from './Integration/Simpson.jsx';
 import Composite_Simpson from './Integration/Composite_Simpson.jsx';
 
+
+
 import Differentiation from './Differentiation/Differentiation.jsx';
 import Numerical_Differentiation from './Differentiation/Numerical_Differentiation.jsx';
 
@@ -76,6 +78,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/Integration/Composite_Trapezoidal" element={<Composite_Trapezoidal/>} />
         <Route path="/Integration/Simpson" element={<Simpson />} />
         <Route path="/Integration/Composite_Simpson" element={<Composite_Simpson />} />
+       
 
         <Route path="/Differentiation/Differentiation" element={<Differentiation />} />
         <Route path="/Differentiation/Numerical_Differentiation" element={<Numerical_Differentiation />} />

@@ -2,155 +2,198 @@ import { useState } from "react";
 import Plot from "react-plotly.js";
 
 function Jacobi() {
-  const [x1, setX1] = useState(0);
-  const [x2, setX2] = useState(0);
-  const [x3, setX3] = useState(0);
-  const [x4, setX4] = useState(0);
-  const [tol, setTol] = useState(0.000001);
-  const [iterations, setIterations] = useState([]);
+  const [n, setN] = useState(3);
+  const [A, setA] = useState(
+    Array(3).fill(0).map(() => Array(3).fill(0))
+  );
+  const [B, setB] = useState(Array(3).fill(0));
+  const [X, setX] = useState([]);
+  const [iterations, setIterations] = useState(50); // จำนวนรอบ iteration
+  const [tolerance, setTolerance] = useState(0.000001); // ค่าความคลาดเคลื่อน
+
+  const handleSizeChange = (size) => {
+    const newSize = parseInt(size);
+    setN(newSize);
+    setA(Array(newSize).fill(0).map(() => Array(newSize).fill(0)));
+    setB(Array(newSize).fill(0));
+    setX([]);
+  };
+
+  const handleAChange = (i, j, value) => {
+    const newA = [...A];
+    newA[i][j] = parseFloat(value) || 0;
+    setA(newA);
+  };
+
+  const handleBChange = (i, value) => {
+    const newB = [...B];
+    newB[i] = parseFloat(value) || 0;
+    setB(newB);
+  };
 
   const calculate = () => {
-    let x1Val = x1;
-    let x2Val = x2;
-    let x3Val = x3;
-    let x4Val = x4;
+    const n = A.length;
+    let xOld = Array(n).fill(0);
+    let xNew = Array(n).fill(0);
+    let converged = false;
 
-    let iter = 0;
-    const results = [];
+    for (let iter = 0; iter < iterations; iter++) {
+      for (let i = 0; i < n; i++) {
+        let sum = 0;
+        for (let j = 0; j < n; j++) {
+          if (j !== i) sum += A[i][j] * xOld[j];
+        }
+        xNew[i] = (B[i] - sum) / A[i][i];
+      }
 
-    while (true) {
-      iter++;
+      // ตรวจสอบว่าค่าเปลี่ยนแปลงน้อยกว่า tolerance หรือไม่
+      let error = 0;
+      for (let i = 0; i < n; i++) {
+        error += Math.abs(xNew[i] - xOld[i]);
+      }
 
-      const x1_new = (12 - 2 * x2Val) / 5.0;
-      const x2_new = (17 - 2 * x1Val - 2 * x3Val) / 5.0;
-      const x3_new = (14 - 2 * x2Val - 2 * x4Val) / 5.0;
-      const x4_new = (7 - 2 * x3Val) / 5.0;
+      if (error < tolerance) {
+        converged = true;
+        break;
+      }
 
-      const err1 = Math.abs(x1_new - x1Val);
-      const err2 = Math.abs(x2_new - x2Val);
-      const err3 = Math.abs(x3_new - x3Val);
-      const err4 = Math.abs(x4_new - x4Val);
-
-      results.push({
-        iter,
-        x1: x1_new,
-        x2: x2_new,
-        x3: x3_new,
-        x4: x4_new,
-        err1,
-        err2,
-        err3,
-        err4,
-      });
-
-      x1Val = x1_new;
-      x2Val = x2_new;
-      x3Val = x3_new;
-      x4Val = x4_new;
-
-      if (err1 < tol && err2 < tol && err3 < tol && err4 < tol) break;
-      if (iter > 1000) break; // safety
+      xOld = [...xNew];
     }
 
-    setIterations(results);
+    if (converged) {
+      setX(xNew);
+    } else {
+      alert("ไม่ลู่เข้า (ไม่สามารถหาคำตอบได้ภายในจำนวนรอบที่กำหนด)");
+      setX([]);
+    }
   };
 
   return (
-    <div>
+    <div
+      style={{
+        padding: "20px",
+        fontFamily: "sans-serif",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
       <h1>Jacobi Iteration Method</h1>
-      <div style={{ marginBottom: "10px" }}>
+
+      <div style={{ marginBottom: "15px" }}>
         <label>
-          x1: <input type="number" value={x1} onChange={(e) => setX1(Number(e.target.value))} />
+          <b>Matrix Size : </b>
+          <select
+            value={n}
+            onChange={(e) => handleSizeChange(e.target.value)}
+          >
+            {[2, 3, 4, 5].map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
         </label>
-        <label>
-          x2: <input type="number" value={x2} onChange={(e) => setX2(Number(e.target.value))} />
+
+        <label style={{ marginLeft: "20px" }}>
+          Iterations :
+          <input
+            type="number"
+            value={iterations}
+            onChange={(e) => setIterations(parseInt(e.target.value))}
+            style={{ width: "70px", marginLeft: "5px", textAlign: "center" }}
+          />
         </label>
-        <label>
-          x3: <input type="number" value={x3} onChange={(e) => setX3(Number(e.target.value))} />
+
+        <label style={{ marginLeft: "20px" }}>
+          Tolerance :
+          <input
+            type="number"
+            step="0.000001"
+            value={tolerance}
+            onChange={(e) => setTolerance(parseFloat(e.target.value))}
+            style={{ width: "100px", marginLeft: "5px", textAlign: "center" }}
+          />
         </label>
-        <label>
-          x4: <input type="number" value={x4} onChange={(e) => setX4(Number(e.target.value))} />
-        </label>
-        <label>
-          Tolerance: <input type="number" value={tol} onChange={(e) => setTol(Number(e.target.value))} />
-        </label>
-        <button onClick={calculate}>Calculate</button>
+
+        <button
+          onClick={calculate}
+          style={{
+            marginLeft: "20px",
+            padding: "8px 16px",
+            background: "#4CAF50",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Calculate
+        </button>
       </div>
 
-      {iterations.length > 0 && (
-        <>
-          <h2>Iterations:</h2>
-          <table border="1" cellPadding="5">
-            <thead>
-              <tr>
-                <th>Iteration</th>
-                <th>x1</th><th>Error</th>
-                <th>x2</th><th>Error</th>
-                <th>x3</th><th>Error</th>
-                <th>x4</th><th>Error</th>
-              </tr>
-            </thead>
-            <tbody>
-              {iterations.map((row) => (
-                <tr key={row.iter}>
-                  <td>{row.iter}</td>
-                  <td>{row.x1.toFixed(6)}</td>
-                  <td>{row.err1.toExponential(3)}</td>
-                  <td>{row.x2.toFixed(6)}</td>
-                  <td>{row.err2.toExponential(3)}</td>
-                  <td>{row.x3.toFixed(6)}</td>
-                  <td>{row.err3.toExponential(3)}</td>
-                  <td>{row.x4.toFixed(6)}</td>
-                  <td>{row.err4.toExponential(3)}</td>
-                </tr>
+      {/* ===== Matrix A ===== */}
+      <h3>Matrix A:</h3>
+      <table
+        border="1"
+        cellPadding="5"
+        style={{ borderCollapse: "collapse", marginBottom: "10px" }}
+      >
+        <tbody>
+          {A.map((row, i) => (
+            <tr key={i}>
+              {row.map((val, j) => (
+                <td key={j}>
+                  <input
+                    type="number"
+                    value={val}
+                    onChange={(e) => handleAChange(i, j, e.target.value)}
+                    style={{
+                      width: "60px",
+                      textAlign: "center",
+                      border: "none",
+                    }}
+                  />
+                </td>
               ))}
-            </tbody>
-          </table>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-          <h2>Convergence Graph:</h2>
-          <Plot
-            data={[
-              {
-                x: iterations.map((r) => r.iter),
-                y: iterations.map((r) => r.x1),
-                type: "scatter",
-                mode: "lines+markers",
-                name: "x1",
-              },
-              {
-                x: iterations.map((r) => r.iter),
-                y: iterations.map((r) => r.x2),
-                type: "scatter",
-                mode: "lines+markers",
-                name: "x2",
-              },
-              {
-                x: iterations.map((r) => r.iter),
-                y: iterations.map((r) => r.x3),
-                type: "scatter",
-                mode: "lines+markers",
-                name: "x3",
-              },
-              {
-                x: iterations.map((r) => r.iter),
-                y: iterations.map((r) => r.x4),
-                type: "scatter",
-                mode: "lines+markers",
-                name: "x4",
-              },
-            ]}
-            layout={{
-              title: "Jacobi Iteration Convergence",
-              xaxis: { title: "Iteration" },
-              yaxis: { title: "Value" },
-              width: 800,
-              height: 500,
+      {/* ===== Vector B ===== */}
+      <h3>Vector b:</h3>
+      <div>
+        {B.map((val, i) => (
+          <input
+            key={i}
+            type="number"
+            value={val}
+            onChange={(e) => handleBChange(i, e.target.value)}
+            style={{
+              width: "60px",
+              margin: "3px",
+              textAlign: "center",
+              border: "none",
             }}
           />
-        </>
+        ))}
+      </div>
+
+      {/* ===== ผลลัพธ์ ===== */}
+      {X.length > 0 && (
+        <div style={{ marginTop: "20px" }}>
+          <h3>ผลลัพธ์ (Solution):</h3>
+          {X.map((xi, i) => (
+            <p key={i}>
+              x{i + 1} = {xi.toFixed(6)}
+            </p>
+          ))}
+        </div>
       )}
     </div>
   );
 }
+
 
 export default Jacobi;
